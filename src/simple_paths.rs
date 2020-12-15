@@ -1,4 +1,4 @@
-use std::{
+use core::{
     hash::Hash,
     iter::{from_fn, FromIterator},
 };
@@ -84,7 +84,8 @@ where
 
 #[cfg(test)]
 mod test {
-    use std::{collections::HashSet, iter::FromIterator};
+    use core::{iter::FromIterator};
+    use hashbrown::HashSet;
 
     use itertools::assert_equal;
 

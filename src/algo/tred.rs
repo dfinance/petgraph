@@ -15,6 +15,7 @@ use crate::visit::{
 };
 use crate::Direction;
 use fixedbitset::FixedBitSet;
+use alloc::vec::Vec;
 
 /// Creates a representation of the same graph respecting topological order for use in `tred::dag_transitive_reduction_closure`.
 ///

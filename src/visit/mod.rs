@@ -51,8 +51,8 @@ pub use self::dfsvisit::*;
 pub use self::traversal::*;
 
 use fixedbitset::FixedBitSet;
-use std::collections::HashSet;
-use std::hash::{BuildHasher, Hash};
+use hashbrown::HashSet;
+use core::hash::{BuildHasher, Hash};
 
 use super::{graph, EdgeType};
 use crate::graph::NodeIndex;

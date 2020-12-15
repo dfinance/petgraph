@@ -4,14 +4,15 @@
 use indexmap::map::Keys;
 use indexmap::map::{Iter as IndexMapIter, IterMut as IndexMapIterMut};
 use indexmap::IndexMap;
-use std::cmp::Ordering;
-use std::fmt;
-use std::hash::{self, Hash};
-use std::iter::FromIterator;
-use std::iter::{Cloned, DoubleEndedIterator};
-use std::marker::PhantomData;
-use std::ops::{Deref, Index, IndexMut};
-use std::slice::Iter;
+use core::cmp::Ordering;
+use core::fmt;
+use core::hash::{self, Hash};
+use core::iter::FromIterator;
+use core::iter::{Cloned, DoubleEndedIterator};
+use core::marker::PhantomData;
+use core::ops::{Deref, Index, IndexMut};
+use core::slice::Iter;
+use alloc::vec::Vec;
 
 use crate::{Directed, Direction, EdgeType, Incoming, Outgoing, Undirected};
 

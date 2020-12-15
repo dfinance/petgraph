@@ -1,10 +1,11 @@
 //! `MatrixGraph<N, E, Ty, NullN, NullE, Ix>` is a graph datastructure backed by an adjacency matrix.
 
-use std::marker::PhantomData;
-use std::ops::{Index, IndexMut};
+use core::marker::PhantomData;
+use core::ops::{Index, IndexMut};
 
-use std::cmp;
-use std::mem;
+use core::cmp;
+use core::mem;
+use alloc::vec::Vec;
 
 use indexmap::IndexSet;
 

@@ -1,8 +1,8 @@
 use crate::prelude::*;
 
 use fixedbitset::FixedBitSet;
-use std::collections::HashSet;
-use std::marker::PhantomData;
+use hashbrown::HashSet;
+use core::marker::PhantomData;
 
 use crate::data::DataMap;
 use crate::visit::{Data, NodeCompactIndexable, NodeCount};

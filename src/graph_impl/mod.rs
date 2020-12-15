@@ -1,11 +1,12 @@
-use std::cmp;
-use std::fmt;
-use std::hash::Hash;
-use std::iter;
-use std::marker::PhantomData;
-use std::mem::size_of;
-use std::ops::{Index, IndexMut, Range};
-use std::slice;
+use core::cmp;
+use core::fmt;
+use core::hash::Hash;
+use core::iter;
+use core::marker::PhantomData;
+use core::mem::size_of;
+use core::ops::{Index, IndexMut, Range};
+use core::slice;
+use alloc::vec::Vec;
 
 use crate::{Directed, Direction, EdgeType, Incoming, IntoWeightedEdge, Outgoing, Undirected};
 
@@ -47,7 +48,7 @@ unsafe impl IndexType for usize {
     }
     #[inline(always)]
     fn max() -> Self {
-        ::std::usize::MAX
+        ::core::usize::MAX
     }
 }
 
@@ -62,7 +63,7 @@ unsafe impl IndexType for u32 {
     }
     #[inline(always)]
     fn max() -> Self {
-        ::std::u32::MAX
+        ::core::u32::MAX
     }
 }
 
@@ -77,7 +78,7 @@ unsafe impl IndexType for u16 {
     }
     #[inline(always)]
     fn max() -> Self {
-        ::std::u16::MAX
+        ::core::u16::MAX
     }
 }
 
@@ -92,7 +93,7 @@ unsafe impl IndexType for u8 {
     }
     #[inline(always)]
     fn max() -> Self {
-        ::std::u8::MAX
+        ::core::u8::MAX
     }
 }
 
@@ -430,7 +431,7 @@ enum Pair<T> {
     None,
 }
 
-use std::cmp::max;
+use core::cmp::max;
 
 /// Get mutable references at index `a` and `b`.
 fn index_twice<T>(slc: &mut [T], a: usize, b: usize) -> Pair<&mut T> {
@@ -1730,7 +1731,7 @@ where
 
 /// Iterator yielding mutable access to all node weights.
 pub struct NodeWeightsMut<'a, N: 'a, Ix: IndexType = DefaultIx> {
-    nodes: ::std::slice::IterMut<'a, Node<N, Ix>>,
+    nodes: ::core::slice::IterMut<'a, Node<N, Ix>>,
 }
 
 impl<'a, N, Ix> Iterator for NodeWeightsMut<'a, N, Ix>
@@ -1750,7 +1751,7 @@ where
 
 /// Iterator yielding mutable access to all edge weights.
 pub struct EdgeWeightsMut<'a, E: 'a, Ix: IndexType = DefaultIx> {
-    edges: ::std::slice::IterMut<'a, Edge<E, Ix>>,
+    edges: ::core::slice::IterMut<'a, Edge<E, Ix>>,
 }
 
 impl<'a, E, Ix> Iterator for EdgeWeightsMut<'a, E, Ix>

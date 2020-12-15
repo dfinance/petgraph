@@ -1,10 +1,12 @@
 //! Simple adjacency list.
 use fixedbitset::FixedBitSet;
 use crate::iter_format::NoPretty;
-use std::fmt;
-use std::ops::Range;
+use core::fmt;
+use core::ops::Range;
 use crate::visit::{self, EdgeRef, IntoEdgeReferences, IntoNeighbors, NodeCount};
 use crate::data::{Build, DataMap, DataMapMut};
+use alloc::vec::Vec;
+use alloc::prelude::v1::Box;
 
 #[doc(no_inline)]
 pub use crate::graph::{DefaultIx, IndexType};
@@ -31,7 +33,7 @@ impl (Iterator) for
 /// It does not borrow the graph during iteration.
 struct OutgoingEdgeIndices <Ix> where { Ix: IndexType }
 item: EdgeIndex<Ix>,
-iter: std::iter::Map<std::iter::Zip<Range<usize>, std::iter::Repeat<NodeIndex<Ix>>>, fn((usize, NodeIndex<Ix>)) -> EdgeIndex<Ix>>,
+iter: core::iter::Map<core::iter::Zip<Range<usize>, core::iter::Repeat<NodeIndex<Ix>>>, fn((usize, NodeIndex<Ix>)) -> EdgeIndex<Ix>>,
 }
 
 /// Weighted sucessor
@@ -45,14 +47,14 @@ struct WSuc<E, Ix: IndexType> {
 
 /// One row of the adjacency list.
 type Row<E, Ix> = Vec<WSuc<E, Ix>>;
-type RowIter<'a, E, Ix> = std::slice::Iter<'a, WSuc<E, Ix>>;
+type RowIter<'a, E, Ix> = core::slice::Iter<'a, WSuc<E, Ix>>;
 
 iterator_wrap! {
 impl (Iterator DoubleEndedIterator ExactSizeIterator) for
 /// An iterator over the indices of the neighbors of a node.
 struct Neighbors<'a, E, Ix> where { Ix: IndexType }
 item: NodeIndex<Ix>,
-iter: std::iter::Map<RowIter<'a, E, Ix>, fn(&WSuc<E, Ix>) -> NodeIndex<Ix>>,
+iter: core::iter::Map<RowIter<'a, E, Ix>, fn(&WSuc<E, Ix>) -> NodeIndex<Ix>>,
 }
 
 /// A reference to an edge of the graph.
@@ -93,7 +95,7 @@ impl<'a, E, Ix: IndexType> visit::EdgeRef for EdgeReference<'a, E, Ix> {
 }
 
 pub struct EdgeIndices<'a, E, Ix: IndexType> {
-    rows: std::iter::Enumerate<std::slice::Iter<'a, Row<E, Ix>>>,
+    rows: core::iter::Enumerate<core::slice::Iter<'a, Row<E, Ix>>>,
     row_index: usize,
     row_len: usize,
     cur: usize,
@@ -129,7 +131,7 @@ iterator_wrap! {
     /// An iterator over all node indices in the graph.
     struct NodeIndices <Ix> where {}
     item: Ix,
-    iter: std::iter::Map<Range<usize>, fn(usize) -> Ix>,
+    iter: core::iter::Map<Range<usize>, fn(usize) -> Ix>,
 }
 
 /// An adjacency list with labeled edges.
@@ -259,7 +261,7 @@ impl<E, Ix: IndexType> List<E, Ix> {
                 successor_index,
             };
         let iter = (0..(self.suc[a.index()].len()))
-            .zip(std::iter::repeat(a))
+            .zip(core::iter::repeat(a))
             .map(proj);
         OutgoingEdgeIndices { iter }
     }
@@ -377,7 +379,7 @@ where
         let mut edge_list = f.debug_list();
         let iter: Self = self.clone();
         for e in iter {
-            if std::mem::size_of::<E>() != 0 {
+            if core::mem::size_of::<E>() != 0 {
                 edge_list.entry(&(
                     NoPretty((e.source().index(), e.target().index())),
                     e.weight(),
@@ -472,8 +474,8 @@ impl<'a, E, Ix: IndexType> IntoNeighbors for &'a List<E, Ix> {
     }
 }
 
-type SomeIter<'a, E, Ix> = std::iter::Map<
-    std::iter::Zip<std::iter::Enumerate<RowIter<'a, E, Ix>>, std::iter::Repeat<Ix>>,
+type SomeIter<'a, E, Ix> = core::iter::Map<
+    core::iter::Zip<core::iter::Enumerate<RowIter<'a, E, Ix>>, core::iter::Repeat<Ix>>,
     fn(((usize, &'a WSuc<E, Ix>), Ix)) -> EdgeReference<'a, E, Ix>,
 >;
 
@@ -482,9 +484,9 @@ impl (Iterator) for
 /// An iterator over the [`EdgeReference`] of all the edges of the graph.
 struct EdgeReferences<'a, E, Ix> where { Ix: IndexType }
 item: EdgeReference<'a, E, Ix>,
-iter: std::iter::FlatMap<
-    std::iter::Enumerate<
-        std::slice::Iter<'a, Row<E, Ix>>
+iter: core::iter::FlatMap<
+    core::iter::Enumerate<
+        core::slice::Iter<'a, Row<E, Ix>>
     >,
     SomeIter<'a, E, Ix>,
     fn(
@@ -515,7 +517,7 @@ fn proj2<'a, E, Ix: IndexType>(
 ) -> SomeIter<'a, E, Ix> {
     row.iter()
         .enumerate()
-        .zip(std::iter::repeat(Ix::new(row_index)))
+        .zip(core::iter::repeat(Ix::new(row_index)))
         .map(proj1 as _)
 }
 
@@ -542,7 +544,7 @@ impl<'a, Ix: IndexType, E> visit::IntoEdges for &'a List<E, Ix> {
         let iter = self.suc[a.index()]
             .iter()
             .enumerate()
-            .zip(std::iter::repeat(a))
+            .zip(core::iter::repeat(a))
             .map(proj1 as _);
         OutgoingEdgeReferences { iter }
     }

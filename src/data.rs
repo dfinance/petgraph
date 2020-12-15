@@ -9,6 +9,8 @@ use crate::visit::{Data, NodeCount, NodeIndexable, Reversed};
 use crate::EdgeType;
 use crate::Graph;
 
+use alloc::vec::Vec;
+
 trait_template! {
     /// Access node and edge weights (associated data).
 pub trait DataMap : Data {

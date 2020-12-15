@@ -105,6 +105,11 @@
 //!
 #![doc(html_root_url = "https://docs.rs/petgraph/0.4/")]
 
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[macro_use]
+extern crate alloc;
+
 extern crate fixedbitset;
 #[cfg(feature = "graphmap")]
 extern crate indexmap;
