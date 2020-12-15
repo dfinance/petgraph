@@ -9,6 +9,7 @@ use crate::{
     visit::{IntoNeighborsDirected, NodeCount},
     Direction::Outgoing,
 };
+use hashbrown::hash_map::DefaultHashBuilder;
 
 /// Returns iterator that produces all simple paths from `from` node to `to`, which contains at least `min_intermediate_nodes` nodes
 /// and at most `max_intermediate_nodes`, if given, limited by graph's order otherwise
@@ -39,7 +40,7 @@ where
     let min_length = min_intermediate_nodes + 1;
 
     // list of visited nodes
-    let mut visited: IndexSet<G::NodeId> = IndexSet::from_iter(Some(from));
+    let mut visited: IndexSet<G::NodeId, DefaultHashBuilder> = IndexSet::from_iter(Some(from));
     // list of childs of currently exploring path nodes,
     // last elem is list of childs of last visited node
     let mut stack = vec![graph.neighbors_directed(from, Outgoing)];

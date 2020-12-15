@@ -24,6 +24,7 @@ use crate::visit::{
 use crate::data::Build;
 
 pub use crate::graph::IndexType;
+use hashbrown::hash_map::DefaultHashBuilder;
 
 // The following types are used to control the max size of the adjacency matrix. Since the maximum
 // size of the matrix vector's is the square of the maximum number of nodes, the number of nodes
@@ -849,7 +850,7 @@ fn ensure_len<T: Default>(v: &mut Vec<T>, size: usize) {
 struct IdStorage<T> {
     elements: Vec<Option<T>>,
     upper_bound: usize,
-    removed_ids: IndexSet<usize>,
+    removed_ids: IndexSet<usize, DefaultHashBuilder>,
 }
 
 impl<T> IdStorage<T> {
@@ -857,7 +858,7 @@ impl<T> IdStorage<T> {
         IdStorage {
             elements: Vec::with_capacity(capacity),
             upper_bound: 0,
-            removed_ids: IndexSet::new(),
+            removed_ids: IndexSet::with_hasher(DefaultHashBuilder::new()),
         }
     }
 
@@ -923,7 +924,7 @@ impl<T> IndexMut<usize> for IdStorage<T> {
 
 struct IdIterator<'a> {
     upper_bound: usize,
-    removed_ids: &'a IndexSet<usize>,
+    removed_ids: &'a IndexSet<usize, DefaultHashBuilder>,
     current: Option<usize>,
 }
 
